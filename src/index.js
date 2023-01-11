@@ -35,15 +35,17 @@ const header = document.createAttribute("h3");
 dogCard.classList.add("dog-card");
 dogImg.classList.add("dog-image");
 
-dogCard.textContent = 
+heading.textContent = `Breed: ${breed}`;
+dogImg.src = imageURL;
 
   // create the hierarchy
 dogCard.appendChild(dogImg);
 dogCard.appendChild(header);
   // add some interactivity
-document.addEventListener('click', () => {
-  
+dogCard.addEventListener('click', () => {
+  dogCard.classList.toggle("selected");
 })
+  return dogCard;
   // never forget to return!
 }
 
