@@ -1,3 +1,5 @@
+import axios from "axios";
+
 // 👉 TASK 1- Test out the following endpoints:
 
 //  https://dog.ceo/api/breeds/image/random
@@ -9,7 +11,7 @@
 // 👉 TASK 2- Select the "entry point", the element
 // inside of which we'll inject our dog cards 
 const entryPoint = document.querySelector(".entry");
-console.log(entryPoint)
+
 
 
 // 👉 TASK 3- `dogCardMaker` takes an object and returns a Dog Card.
@@ -28,21 +30,21 @@ function dogCardMaker({ imageURL, breed }) {
     </div>
   */
   // set class names, attributes and text
-const dogCard = document.createAttribute("div");
-const dogImg = document.createAttribute("img");
-const header = document.createAttribute("h3");
-
+const dogCard = document.createElement("div");
+const dogImg = document.createElement("img");
+const heading = document.createElement("h3");
+heading.textContent = `Breed: ${breed}`;
+dogImg.src = imageURL;
 dogCard.classList.add("dog-card");
 dogImg.classList.add("dog-image");
 
-heading.textContent = `Breed: ${breed}`;
-dogImg.src = imageURL;
+
 
   // create the hierarchy
 dogCard.appendChild(dogImg);
-dogCard.appendChild(header);
+dogCard.appendChild(heading);
   // add some interactivity
-dogCard.addEventListener('click', () => {
+dogCard.addEventListener("click", () => {
   dogCard.classList.toggle("selected");
 })
   return dogCard;
@@ -53,12 +55,46 @@ dogCard.addEventListener('click', () => {
 // 👉 TASK 4- Bring the Axios library into the project using one of two methods:
 //    * Traditional way: put another script tag inside index.html (`https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js`)
 //    * Projects with npm: install it with npm and import it into this file
+// to get axios - npm install axios in terminal** and add this to very top of page import axios from "axios";
 
+// axios.get("https://dog.ceo/api/breeds/image/random")
+// .then(res => {
+//   const dogCard = dogCardMaker({ imageURL: res.data.message, breed: "Casey" });  
+//   entryPoint.appendChild(dogCard);
+// })
+// .catch(err => {
+//   console.error(err);
+// })
+// .finally(() => console.log("OHMYGOSH DONE!"))
 
 // 👉 TASK 5- Fetch dogs from `https://dog.ceo/api/breed/{breed}/images/random/{number}`
 //    * ON SUCCESS: use the data to create dogCards and append them to the entry point
 //    * ON FAILURE: log the error to the console
 //    * IN ANY CASE: log "done" to the console
+
+function getDogs(breed, count) {
+  axios.get(`https://dog.ceo/api/breed/${breed}/images/random/${count}`)
+  .then(res => {
+    res.data.message.forEach(imageURL => {
+    const dogCard = dogCardMaker({ imageURL, breed });  
+    entryPoint.appendChild(dogCard);
+    })
+    // imageURL: res.data.message, breed: breed
+
+  })
+  .catch(err => {
+    console.error(err);
+  })
+  .finally(() => console.log("OHMYGOSH DONE!")) 
+}
+document.querySelector("button").addEventListener("click", () => {
+  getDogs("mastiff", 3);
+  getDogs("appenzeller", 3);
+})
+
+
+getDogs(50);
+
 
 
 // 👉 (OPTIONAL) TASK 6- Wrap the fetching operation inside a function `getDogs`
